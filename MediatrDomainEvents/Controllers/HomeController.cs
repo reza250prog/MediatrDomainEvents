@@ -1,4 +1,5 @@
 ﻿using MediatrDomainEvents.Data;
+using MediatrDomainEvents.DTO;
 using MediatrDomainEvents.Entities;
 using MediatrDomainEvents.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,37 @@ namespace MediatrDomainEvents.Controllers
 
         public IActionResult Index()
         {
-            //var todoItem =new TodoItem()
+
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> AddToDoItem()
         {
-            return View();
+            var todoItem = new TodoItem(new CreateToDoItem
+            {
+                Note = $"note {DateTime.Now}",
+                Title = $"title {DateTime.Now}",
+                Priority = Enums.PriorityLevel.High,
+                Reminder = DateTime.Now.AddDays(5)
+            });
+
+            await db.TodoItems.AddAsync(todoItem);
+            await db.SaveChangesAsync();
+            return Ok(todoItem);
+        }
+
+        public async Task<IActionResult> SetComplete(int id)
+        {
+            var todoItem = await db.TodoItems.FindAsync(id);
+
+            if (todoItem is not null)
+            {
+                todoItem.MarkAsComplete();
+                db.Update(todoItem);
+                await db.SaveChangesAsync();
+            }
+           
+            return Ok(todoItem);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -20,6 +20,10 @@ namespace MediatrDomainEvents.Entities
 
         public bool Done { get; set; }
 
+        public TodoItem()
+        {
+        }
+
         public TodoItem(CreateToDoItem model)
         {
             Title = model.Title;

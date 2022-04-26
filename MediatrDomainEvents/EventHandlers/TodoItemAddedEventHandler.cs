@@ -6,18 +6,19 @@ using MediatrDomainEvents.Events;
 
 namespace MediatrDomainEvents.EventHandlers
 {
-    public class TodoItemCompletedEventHandler : INotificationHandler<DomainEventNotification<TodoItemCompletedEvent>>
+    public class TodoItemAddedEventHandler : INotificationHandler<DomainEventNotification<TodoItemAddedEvent>>
     {
-        private readonly ILogger<TodoItemCompletedEventHandler> _logger;
+        private readonly ILogger<TodoItemAddedEventHandler> _logger;
         private readonly ApplicationDbContext db;
 
-        public TodoItemCompletedEventHandler(ILogger<TodoItemCompletedEventHandler> logger, ApplicationDbContext db)
+        public TodoItemAddedEventHandler(ILogger<TodoItemAddedEventHandler> logger,
+             ApplicationDbContext db)
         {
             _logger = logger;
             this.db = db;
         }
 
-        public Task Handle(DomainEventNotification<TodoItemCompletedEvent> notification, CancellationToken cancellationToken)
+        public Task Handle(DomainEventNotification<TodoItemAddedEvent> notification, CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
 
@@ -27,8 +28,8 @@ namespace MediatrDomainEvents.EventHandlers
             {
                 Event = domainEvent.GetType().Name + " With Id : " + domainEvent.Item.Id
             },
-                 cancellationToken)
-                     .GetAwaiter();
+           cancellationToken)
+               .GetAwaiter();
 
             db.SaveChangesAsync(cancellationToken).GetAwaiter();
             return Task.CompletedTask;

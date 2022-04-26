@@ -18,6 +18,7 @@ namespace MediatrDomainEvents.Data
         }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<SystemEvents> SystemEvents { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -44,9 +45,7 @@ namespace MediatrDomainEvents.Data
             var result = await base.SaveChangesAsync(cancellationToken);
 
             if (result > 0)
-            {
                 await DispatchEvents(events);
-            }
 
             return result;
         }

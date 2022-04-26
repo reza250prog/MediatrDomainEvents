@@ -4,9 +4,10 @@
     {
         protected DomainEvent()
         {
-            DateOccurred = DateTimeOffset.UtcNow;
+            DateOccurred = DateTime.Now;
         }
+
         public bool IsPublished { get; set; }
-        public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
+        public DateTimeOffset DateOccurred { get; protected set; } = DateTime.Now;
     }
 }
